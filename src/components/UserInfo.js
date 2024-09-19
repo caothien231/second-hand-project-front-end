@@ -23,6 +23,7 @@ function UserInfo() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                console.log(response);
                 setUserInfo(response.data);
             } catch (error) {
                 console.error('Failed to fetch user info:', error);

@@ -9,21 +9,16 @@ function HealthStatus() {
 
     useEffect(() => {
         const fetchHealthStatus = async () => {
+            const token = Cookies.get('token');
             try {
-                // Retrieve the token from cookies
-                const token = Cookies.get('token');
-                console.log('JWT Token:', token);
-
                 const response = await axios.get('http://localhost:8005/api/health', {
                     headers: {
-                        'Authorization': `Bearer ${token}` // Include the token in the request header
+                        Authorization: `Bearer ${token}`,
                     },
-                    withCredentials: true // Ensure credentials are sent with the request
                 });
-
                 setStatus(response.data.status);
                 setLoading(false);
-            } catch (error) {
+            }  catch (error) {
                 console.error('There was an error fetching the health status!', error);
                 setError('Error fetching status');
                 setLoading(false);
