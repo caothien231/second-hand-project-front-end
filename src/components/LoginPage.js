@@ -3,10 +3,12 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
-function LoginPage() {
+import { Form, Button, Container, Alert } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+function LoginPage({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [token, setToken] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -20,16 +22,10 @@ function LoginPage() {
             });
             const token = response.data.token;
             const expiresIn = response.data.expiresIn; // Assuming the expiration time is returned as 'expiresIn'
-            console.log("expiresIn", expiresIn);
-            console.log("curr time", new Date(new Date().getTime()));
             const expirationDate = new Date(new Date().getTime() + expiresIn);
-            console.log("time", expirationDate);
-            setToken(token);
-            setError('');
-
-            // Set the token with expiration
             Cookies.set('token', token, { expires: expirationDate, secure: true });
 
+            onLogin(); // Call the callback to update the login state in parent
             navigate('/home');
         } catch (err) {
             console.error('Login failed', err);
@@ -38,43 +34,37 @@ function LoginPage() {
     };
 
     return (
-        <div className="login-page">
+        <Container className="mt-5">
             <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleLogin} className="mx-auto" style={{ maxWidth: '400px' }}>
+                <Form.Group controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
                         type="email"
-                        id="email"
+                        placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
+                </Form.Group>
+
+                <Form.Group controlId="password" className="mt-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
                         type="password"
-                        id="password"
+                        placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            {token && (
-                <div>
-                    <h3>Token:</h3>
-                    <p>{token}</p>
-                </div>
-            )}
-            {error && (
-                <div>
-                    <p>{error}</p>
-                </div>
-            )}
-        </div>
+                </Form.Group>
+
+                <Button variant="primary" type="submit" className="mt-3">
+                    Login
+                </Button>
+            </Form>
+        </Container>
     );
 }
 

@@ -8,17 +8,17 @@ function UserInfo() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = Cookies.get('token');
-        if (!token) {
-            // If no token, redirect to login
-            navigate('/login');
-            return;
-        }
+        // const token = Cookies.get('token');
+        // if (!token) {
+        //     // If no token, redirect to login
+        //     navigate('/login');
+        //     return;
+        // }
 
         const fetchUserInfo = async () => {
             const token = Cookies.get('token');
             try {
-                const response = await axios.get('http://localhost:8005/users/me', {
+                const response = await axios.get('http://localhost:8005/api/users/me', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

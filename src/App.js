@@ -1,28 +1,45 @@
 import './App.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HealthStatus from './components/HealthStatus';
-import LoginPage from './components/Login';
+import LoginPage from './components/LoginPage';
 import UserInfo from './components/UserInfo';
 import HomePage from './components/HomePage';
+import AppNavbar from './components/AppNavbar';
+import Cookies from 'js-cookie';
+
 
 function App() {
-  return (
-      <Router>
-          <div className="App">
-              <header className="App-header">
-                  <h1>Welcome to My Application</h1>
-              </header>
-              <Routes>
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/health-check" element={<HealthStatus />} />
-                  <Route path="/user-info" element={<UserInfo />} />
-                  <Route path="/home/*" element={<HomePage />} />
-                  {/* Add other routes here */}
-              </Routes>
-          </div>
-      </Router>
-  );
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const token = Cookies.get('token');
+        if (token) {
+            setIsLoggedIn(true);
+        }
+    }, []);
+
+    const handleLogin = () => {
+        setIsLoggedIn(true);
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        Cookies.remove('token'); // Clear the token on logout
+    };
+
+    return (
+        <Router>
+            <div className="App">
+                <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+                <Routes>
+                    <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+                    <Route path="/home/*" element={<HomePage />} />
+                    {/* Add other routes here */}
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
