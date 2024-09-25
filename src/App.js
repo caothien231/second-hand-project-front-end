@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HealthStatus from './components/HealthStatus';
 import LoginPage from './components/LoginPage';
-import UserInfo from './components/UserInfo';
+import UserPage from './components/UserPage';
 import HomePage from './components/HomePage';
 import AppNavbar from './components/AppNavbar';
 import Cookies from 'js-cookie';
@@ -35,6 +35,7 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
                     <Route path="/home/*" element={<HomePage />} />
+                    <Route path="/user-page/*" element={<UserPage />} />
                     {/* Add other routes here */}
                 </Routes>
             </div>

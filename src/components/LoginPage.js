@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-
+import { useUser } from '../context/UserContext';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,6 +11,7 @@ function LoginPage({ onLogin }) {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { setUser } = useUser();
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -24,6 +25,15 @@ function LoginPage({ onLogin }) {
             const expiresIn = response.data.expiresIn; // Assuming the expiration time is returned as 'expiresIn'
             const expirationDate = new Date(new Date().getTime() + expiresIn);
             Cookies.set('token', token, { expires: expirationDate, secure: true });
+
+            // Fetch user info and set it in context
+            const userInfoResponse = await axios.get('http://localhost:8005/api/users/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log("User info" + userInfoResponse.data)
+            setUser(userInfoResponse.data);
 
             onLogin(); // Call the callback to update the login state in parent
             navigate('/home');
