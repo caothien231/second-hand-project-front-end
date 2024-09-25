@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -74,6 +74,9 @@ function LoginPage({ onLogin }) {
                     Login
                 </Button>
             </Form>
+            <p className="mt-3">
+                Don't have an account? <Link to="/signup">Sign up here</Link>
+            </p>
         </Container>
     );
 }

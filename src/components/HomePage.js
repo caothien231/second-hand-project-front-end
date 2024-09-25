@@ -31,6 +31,11 @@ function HomePage() {
         fetchProducts();
     }, []);
 
+    // Filter products based on the search term
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     if (loading) {
         return <Spinner animation="border" />;
     }

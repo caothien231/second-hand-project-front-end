@@ -7,6 +7,7 @@ import UserPage from './components/UserPage';
 import HomePage from './components/HomePage';
 import AppNavbar from './components/AppNavbar';
 import Cookies from 'js-cookie';
+import SignUpPage from './components/SignUpPage';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                 <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
                 <Routes>
                     <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+                    <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/home/*" element={<HomePage />} />
                     <Route path="/user-page/*" element={<UserPage />} />
                     {/* Add other routes here */}
