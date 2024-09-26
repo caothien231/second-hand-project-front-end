@@ -8,6 +8,7 @@ import HomePage from './components/HomePage';
 import AppNavbar from './components/AppNavbar';
 import Cookies from 'js-cookie';
 import SignUpPage from './components/SignUpPage';
+import UploadProductPage from './components/UploadProductPage';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/home/*" element={<HomePage />} />
                     <Route path="/user-page/*" element={<UserPage />} />
+                    <Route path="/upload-product/*" element={<UploadProductPage />} />
                     {/* Add other routes here */}
                 </Routes>
             </div>

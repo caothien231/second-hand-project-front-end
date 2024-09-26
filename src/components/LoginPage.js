@@ -32,7 +32,7 @@ function LoginPage({ onLogin }) {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log("User info" + userInfoResponse.data)
+            console.log("User info: " + JSON.stringify(userInfoResponse.data));
             setUser(userInfoResponse.data);
 
             onLogin(); // Call the callback to update the login state in parent

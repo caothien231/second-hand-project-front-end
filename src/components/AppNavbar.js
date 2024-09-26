@@ -30,6 +30,7 @@ function AppNavbar({ isLoggedIn, onLogout }) {
                     ) : (
                         <>
                             <Nav.Link as={Link} to="/user-page" onClick={handleLinkClick}>User Info</Nav.Link>
+                            <Nav.Link as={Link} to="/upload-product" onClick={handleLinkClick}>Upload Product</Nav.Link>
                             <Button variant="outline-light" onClick={handleLogout}>Logout</Button>
                         </>
                     )}
