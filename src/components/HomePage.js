@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AppNavbar from './AppNavbar';
 import SearchBar from './SearchBar';
 
+
 function HomePage() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ function HomePage() {
             try {
                 const response = await axios.get('http://localhost:8005/api/products/');
                 const availableProducts = response.data.filter(product => product.status === 'AVAILABLE');
+                console.log(JSON.stringify(availableProducts));
                 setProducts(availableProducts);
             } catch (error) {
                 console.error('Failed to fetch products:', error);
@@ -45,13 +47,18 @@ function HomePage() {
     }
 
     return (
-        <div>
+        <div className="home-page-container">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <h2>Products</h2>
             <Row xs={1} md={2} lg={3} className="g-4">
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                     <Col key={product.id}>
                         <Card>
+                            {product.imageUrl ? (
+                                <Card.Img variant="top" src={product.imageUrl} alt={product.name} />
+                            ) : (
+                                <Card.Img variant="top" src="https://via.placeholder.com/150" alt="No Image Available" />
+                            )}
                             <Card.Body>
                                 <Card.Title>{product.name}</Card.Title>
                                 <Card.Text>

@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useUser } from '../context/UserContext';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../firebase';
+import Cookies from 'js-cookie';
 
 function UploadProductPage() {
     const [productName, setProductName] = useState('');
@@ -21,49 +24,43 @@ function UploadProductPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
-        // if (!imageFile) {
-        //     setError('Please upload an image.');
-        //     return;
-        // }
-
-        // First, upload the image
-        const formData = new FormData();
-        formData.append('file', imageFile);
-
+    
         try {
-            // const imageResponse = await axios.post('http://localhost:8005/api/products/upload-image', formData, {
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data',
-            //     },
-            // });
-            // const imageUrl = imageResponse.data; // Get the image URL from response
-
-            // Now, submit the product details along with the image URL
-            const productData = {
-                name: productName,
-                price: productPrice,
-                description: productDescription,
-                sellerId: user.id, 
-                status: 'AVAILABLE',
-                // imageUrl: imageUrl, // Attach image URL to product data
-            };
-
-            await axios.post('http://localhost:8005/api/products/create', productData);
-            
-            setSuccess('Product uploaded successfully!');
-            setError('');
-            setProductName('');
-            setProductPrice('');
-            setProductDescription('');
-            setImageFile(null);
-            navigate('/home'); // Navigate to the products page after successful upload
+          let imageUrl = null;
+    
+          // If an image file is provided, upload it to Firebase
+          if (imageFile) {
+            const storageRef = ref(storage, `images/${imageFile.name}`);
+            const snapshot = await uploadBytes(storageRef, imageFile);
+            imageUrl = await getDownloadURL(snapshot.ref);
+          }
+    
+          // Prepare product data, including the image URL if available
+          const productData = {
+            name: productName,
+            price: productPrice,
+            description: productDescription,
+            imageUrl: imageUrl || '', // Optional image URL (empty string if no image)
+            sellerId: user.id,
+            status: 'AVAILABLE'
+          };
+    
+          // Post product data to the backend
+          await axios.post('http://localhost:8005/api/products/create', productData);
+    
+          setSuccess('Product uploaded successfully!');
+          setError('');
+          setProductName('');
+          setProductPrice('');
+          setProductDescription('');
+          setImageFile(null); // Reset the file input
         } catch (err) {
-            console.error('Failed to upload product', err);
-            setError('Failed to upload product. Please try again.');
-            setSuccess('');
+          console.error('Failed to upload product', err);
+          setError('Failed to upload product. Please try again.');
+          setSuccess('');
         }
-    };
+      };
+    
 
     return (
         <Container className="mt-5">

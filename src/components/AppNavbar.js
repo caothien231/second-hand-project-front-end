@@ -5,6 +5,7 @@ import { Navbar, Nav, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AppNavbar({ isLoggedIn, onLogout }) {
+    const navigate = useNavigate();
     const [expanded, setExpanded] = useState(false);
     const handleToggle = () => {
         setExpanded(!expanded);
@@ -15,6 +16,7 @@ function AppNavbar({ isLoggedIn, onLogout }) {
     const handleLogout = () => {
         onLogout(); // Call the logout function from props
         handleLinkClick(); // Collapse the navbar
+        navigate('/home');
     };
     return (
         <Navbar bg="dark" variant="dark" expand="lg" expanded={expanded}>
@@ -29,6 +31,7 @@ function AppNavbar({ isLoggedIn, onLogout }) {
                         </>
                     ) : (
                         <>
+                            <Nav.Link as={Link} to="/home" onClick={handleLinkClick}>Home</Nav.Link>
                             <Nav.Link as={Link} to="/user-page" onClick={handleLinkClick}>User Info</Nav.Link>
                             <Nav.Link as={Link} to="/upload-product" onClick={handleLinkClick}>Upload Product</Nav.Link>
                             <Button variant="outline-light" onClick={handleLogout}>Logout</Button>
