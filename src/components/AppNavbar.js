@@ -14,9 +14,10 @@ function AppNavbar({ isLoggedIn, onLogout }) {
         setExpanded(false); 
     };
     const handleLogout = () => {
+        navigate('/home');
         onLogout(); 
         handleLinkClick(); 
-        navigate('/home');
+        
     };
     return (
         <Navbar bg="dark" variant="dark" expand="lg" expanded={expanded}  fixed="top">
