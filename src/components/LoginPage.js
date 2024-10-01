@@ -35,12 +35,32 @@ function LoginPage({ onLogin }) {
             console.log("User info: " + JSON.stringify(userInfoResponse.data));
             setUser(userInfoResponse.data);
 
-            onLogin(); // Call the callback to update the login state in parent
+            // notify user before token expires
+            const notificationTime = expiresIn - 300000;
+            if (notificationTime > 0) {
+                setTimeout(() => {
+                    alert('Your session will expire in 5 minutes.');
+                }, notificationTime);
+            }
+
+            // Auto logout when token expires
+            setTimeout(() => {
+                handleLogout();
+            }, expiresIn);
+
+            onLogin();
             navigate('/home');
         } catch (err) {
             console.error('Login failed', err);
             setError('Login failed. Please check your credentials.');
         }
+    };
+
+    const handleLogout = () => {
+        Cookies.remove('token');
+        setUser(null);
+        navigate('/login');
+        alert('Session expired, please log in again.');
     };
 
     return (

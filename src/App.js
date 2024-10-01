@@ -9,6 +9,7 @@ import AppNavbar from './components/AppNavbar';
 import Cookies from 'js-cookie';
 import SignUpPage from './components/SignUpPage';
 import UploadProductPage from './components/UploadProductPage';
+import ProductDetail from './components/ProductDetail';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
     const handleLogout = () => {
         setIsLoggedIn(false);
         Cookies.remove('token'); // Clear the token on logout
+        window.location.reload();
     };
 
     return (
@@ -40,6 +42,7 @@ function App() {
                     <Route path="/home/*" element={<HomePage />} />
                     <Route path="/user-page/*" element={<UserPage />} />
                     <Route path="/upload-product/*" element={<UploadProductPage />} />
+                    <Route path="/product/:productId" element={<ProductDetail />} />
                     {/* Add other routes here */}
                 </Routes>
             </div>

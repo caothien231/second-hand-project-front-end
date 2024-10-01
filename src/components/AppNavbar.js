@@ -11,19 +11,19 @@ function AppNavbar({ isLoggedIn, onLogout }) {
         setExpanded(!expanded);
     };
     const handleLinkClick = () => {
-        setExpanded(false); // Collapse the navbar
+        setExpanded(false); 
     };
     const handleLogout = () => {
-        onLogout(); // Call the logout function from props
-        handleLinkClick(); // Collapse the navbar
+        onLogout(); 
+        handleLinkClick(); 
         navigate('/home');
     };
     return (
-        <Navbar bg="dark" variant="dark" expand="lg" expanded={expanded}>
+        <Navbar bg="dark" variant="dark" expand="lg" expanded={expanded}  fixed="top">
             <Navbar.Brand as={Link} to="/home" onClick={handleLinkClick}>Logo</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={handleToggle} />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ml-auto">
+                <Nav className="ms-auto">
                     {!isLoggedIn ? (
                         <>
                             <Nav.Link as={Link} to="/login" onClick={handleLinkClick}>Login</Nav.Link>

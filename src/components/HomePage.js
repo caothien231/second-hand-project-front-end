@@ -5,23 +5,44 @@ import AllUsers from './AllUsers';
 import axios from 'axios';
 import { Card, Col, Row, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AppNavbar from './AppNavbar';
 import SearchBar from './SearchBar';
-
+import '../customStyle.css';
+import ProductCard from './ProductCard';
+import { useUser } from '../context/UserContext';
+import Cookies from 'js-cookie';
 
 function HomePage() {
+    const { user } = useUser(); // Get the user from context
     const [products, setProducts] = useState([]);
+    const [likedProducts, setLikedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    const token = Cookies.get('token');  // Get token from cookies
+    const [isLoggedIn, setIsLoggedIn] = useState(!!token); // Keep track of login status
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
+                // Fetch all available products
                 const response = await axios.get('http://localhost:8005/api/products/');
                 const availableProducts = response.data.filter(product => product.status === 'AVAILABLE');
-                console.log(JSON.stringify(availableProducts));
                 setProducts(availableProducts);
+
+                // If a user is logged in, fetch their liked products
+                if (isLoggedIn && token) {
+                    console.log("USER ID " + user.id);
+                    const likedResponse = await axios.get(`http://localhost:8005/api/users/${user.id}/liked-products`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    const likedProductIds = likedResponse.data.map(product => product.id); // Store only product IDs
+                    setLikedProducts(likedProductIds);
+                } else {
+                    // Reset liked products if no user is logged in
+                    setLikedProducts([]);
+                }
             } catch (error) {
                 console.error('Failed to fetch products:', error);
                 setError('Failed to fetch products');
@@ -31,7 +52,7 @@ function HomePage() {
         };
 
         fetchProducts();
-    }, []);
+    }, [token, isLoggedIn]);  // Re-run the effect if the token or user changes
 
     // Filter products based on the search term
     const filteredProducts = products.filter(product =>
@@ -53,22 +74,7 @@ function HomePage() {
             <Row xs={1} md={2} lg={3} className="g-4">
                 {filteredProducts.map((product) => (
                     <Col key={product.id}>
-                        <Card>
-                            {product.imageUrl ? (
-                                <Card.Img variant="top" src={product.imageUrl} alt={product.name} />
-                            ) : (
-                                <Card.Img variant="top" src="https://via.placeholder.com/150" alt="No Image Available" />
-                            )}
-                            <Card.Body>
-                                <Card.Title>{product.name}</Card.Title>
-                                <Card.Text>
-                                    <strong>Price:</strong> ${product.price.toFixed(2)}<br />
-                                    <strong>Description:</strong> {product.description}<br />
-                                    <strong>Status:</strong> {product.status}<br />
-                                    <strong>Seller:</strong> {product.seller.fullName}<br />
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
+                        <ProductCard product={product} likedProducts={likedProducts} /> {/* Pass likedProducts */}
                     </Col>
                 ))}
             </Row>
