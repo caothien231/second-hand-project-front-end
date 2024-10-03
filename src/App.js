@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import SignUpPage from './components/SignUpPage';
 import UploadProductPage from './components/UploadProductPage';
 import ProductDetail from './components/ProductDetail';
+import ThankYouPage from './components/ThankYouPage';
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
                     <Route path="/user-page/*" element={<UserPage />} />
                     <Route path="/upload-product/*" element={<UploadProductPage />} />
                     <Route path="/product/:productId" element={<ProductDetail />} />
+                    <Route path="/thank-you" element={<ThankYouPage />} />
                     {/* Add other routes here */}
                 </Routes>
             </div>
