@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import { Card, ListGroup, Container, Row, Col, Alert } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function UserList() {
     const [users, setUsers] = useState([]);
@@ -9,13 +12,14 @@ function UserList() {
         const fetchUsers = async () => {
             const token = Cookies.get('token');
             try {
-                const response = await axios.get('http://localhost:8005/users/', {
+                const response = await axios.get('http://localhost:8005/api/users/', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
                 setUsers(response.data);
             } catch (err) {
+                console.log(err);
                 if (err.response) {
                     // Server responded with a status other than 200 range
                     if (err.response.status === 401) {
@@ -40,21 +44,31 @@ function UserList() {
     }, []);
 
     return (
-        <div>
+        <Container className="mt-4">
             <h2>User List</h2>
-            {error ? <p>{error}</p> : (
-                <ul>
-                    {users.map(user => (
-                        <li key={user.id}>
-                            <p>Name: {user.fullName}</p>
-                            <p>Email: {user.email}</p>
-                            <p>Role: {user.role.name}</p>
-                            <p>Status: {user.enabled ? 'Enabled' : 'Disabled'}</p>
-                        </li>
+            {error ? (
+                <Alert variant="danger">{error}</Alert>
+            ) : (
+                <Row xs={1} md={2} lg={3} className="g-4">
+                    {users.map((user) => (
+                        <Col key={user.id}>
+                            <Card className="shadow-sm">
+                                <Card.Body>
+                                    <Card.Title>{user.fullName}</Card.Title>
+                                    <ListGroup variant="flush">
+                                        <ListGroup.Item><strong>Email:</strong> {user.email}</ListGroup.Item>
+                                        <ListGroup.Item><strong>Role:</strong> {user.role.name}</ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <strong>Status:</strong> {user.enabled ? 'Enabled' : 'Disabled'}
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                </Card.Body>
+                            </Card>
+                        </Col>
                     ))}
-                </ul>
+                </Row>
             )}
-        </div>
+        </Container>
     );
 }
 

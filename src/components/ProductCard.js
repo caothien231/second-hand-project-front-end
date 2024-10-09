@@ -6,14 +6,14 @@ import { useUser } from '../context/UserContext';
 import Cookies from 'js-cookie';
 
 function ProductCard({ product, likedProducts }) {
-    console.log("product: " + JSON.stringify(product));
-    console.log("product: " + likedProducts);
+    // console.log("product: " + JSON.stringify(product));
+    // console.log("product: " + likedProducts);
     const { user } = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const token = Cookies.get('token');
     const navigate = useNavigate();
 
-    console.log("product: " + isLiked + " like " + product.id);
+    // console.log("product: " + isLiked + " like " + product.id);
 
     useEffect(() => {
         setIsLiked(likedProducts.includes(product.id));

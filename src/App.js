@@ -11,6 +11,7 @@ import SignUpPage from './components/SignUpPage';
 import UploadProductPage from './components/UploadProductPage';
 import ProductDetail from './components/ProductDetail';
 import ThankYouPage from './components/ThankYouPage';
+import UserList from './components/UserList';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
                     <Route path="/user-page/*" element={<UserPage />} />
                     <Route path="/upload-product/*" element={<UploadProductPage />} />
                     <Route path="/product/:productId" element={<ProductDetail />} />
+                    <Route path="/users" element={<UserList/>} />
                     <Route path="/thank-you" element={<ThankYouPage />} />
                     {/* Add other routes here */}
                 </Routes>

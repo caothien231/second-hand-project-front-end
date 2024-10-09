@@ -20,7 +20,7 @@ function HomePage() {
     const [searchTerm, setSearchTerm] = useState('');
     const token = Cookies.get('token');  // Get token from cookies
     const [isLoggedIn, setIsLoggedIn] = useState(!!token); // Keep track of login status
-
+    console.log(user);
     useEffect(() => {
         const fetchProducts = async () => {
             try {
