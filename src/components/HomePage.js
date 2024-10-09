@@ -38,6 +38,7 @@ function HomePage() {
                         },
                     });
                     const likedProductIds = likedResponse.data.map(product => product.id); // Store only product IDs
+                    console.log("product: " + likedProductIds);
                     setLikedProducts(likedProductIds);
                 } else {
                     // Reset liked products if no user is logged in

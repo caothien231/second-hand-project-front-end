@@ -11,6 +11,7 @@ function UserPage() {
     const { user, setUser } = useUser();
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
+    const [likedProducts, setLikedProducts] = useState([]);
 
     useEffect(() => {
         const token = Cookies.get('token');
@@ -19,7 +20,7 @@ function UserPage() {
             navigate('/login');
             return;
         }
-
+        console.log("User ", user);
         if (!user) {
             // If user info is not available in context, fetch it
             const fetchUserInfo = async () => {
@@ -54,6 +55,14 @@ function UserPage() {
                     });
                     console.log("product: " + JSON.stringify(response.data, null, 2));
                     setProducts(response.data); // Store products in state
+                    const likedResponse = await axios.get(`http://localhost:8005/api/users/${user.id}/liked-products`, {
+                        headers: {
+                            Authorization: `Bearer ${Cookies.get('token')}`,
+                        },
+                    });
+                    const likedProductIds = likedResponse.data.map(product => product.id); // Store only product IDs
+                    console.log("product: " + likedProductIds);
+                    setLikedProducts(likedProductIds);
                 } catch (error) {
                     console.error('Failed to fetch user products:', error);
                 }
@@ -86,7 +95,7 @@ function UserPage() {
                             <Col key={product.id}>
                                 <ProductCard 
                                     product={product} 
-                                    likedProducts={user.likedProducts || []} // Pass likedProducts if available
+                                    likedProducts={likedProducts} // Pass likedProducts if available
                                 />
                             </Col>
                         ))}
