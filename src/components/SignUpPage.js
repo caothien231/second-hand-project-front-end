@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate  } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
+import '../customStyle.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function SignUpPage() {
@@ -9,6 +11,7 @@ function SignUpPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     const handleSignUp = async (event) => {
         event.preventDefault();
@@ -22,10 +25,13 @@ function SignUpPage() {
                 password: password,
             });
             setSuccess('Sign up successful! You can now log in.');
-            // Clear the form fields
             setFullName('');
             setEmail('');
             setPassword('');
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
+
         } catch (err) {
             console.error('Sign up failed', err);
             setError('Sign up failed. Please check your details and try again.');
@@ -33,7 +39,7 @@ function SignUpPage() {
     };
 
     return (
-        <Container>
+        <Container className="sign-up-page-container">
             <h2>Sign Up</h2>
             <Form onSubmit={handleSignUp}>
                 <Form.Group controlId="formFullName">

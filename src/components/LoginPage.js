@@ -64,7 +64,7 @@ function LoginPage({ onLogin }) {
     };
 
     return (
-        <Container className="mt-5">
+        <Container className="log-in-page-container">
             <h2>Login</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleLogin} className="mx-auto" style={{ maxWidth: '400px' }}>

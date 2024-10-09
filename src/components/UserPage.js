@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useUser } from '../context/UserContext';
+import '../customStyle.css';
+import ProductCard from './ProductCard';
+import { Row, Col } from 'react-bootstrap';
 
 function UserPage() {
     const { user, setUser } = useUser();
@@ -61,8 +64,8 @@ function UserPage() {
     }, [user]);
 
     return (
-        <div style={styles.container}>
-            <div style={styles.userInfo}>
+        <div className="user-info-page-container">
+            <div className="user-info">
                 <h2>User Info</h2>
                 {user ? (
                     <div>
@@ -75,18 +78,19 @@ function UserPage() {
                 )}
             </div>
 
-            <div style={styles.productList}>
+            <div className="product-list">
                 <h2>Listing Products</h2>
                 {products.length > 0 ? (
-                    <ul>
+                    <Row xs={1} md={2} lg={3} className="g-4">
                         {products.map((product) => (
-                            <li key={product.id}>
-                                <p><strong>Name:</strong> {product.name}</p>
-                                <p><strong>Price:</strong> ${product.price}</p>
-                                <p><strong>Status:</strong> {product.status}</p>
-                            </li>
+                            <Col key={product.id}>
+                                <ProductCard 
+                                    product={product} 
+                                    likedProducts={user.likedProducts || []} // Pass likedProducts if available
+                                />
+                            </Col>
                         ))}
-                    </ul>
+                    </Row>
                 ) : (
                     <p>No products found.</p>
                 )}
@@ -94,25 +98,5 @@ function UserPage() {
         </div>
     );
 }
-
-const styles = {
-    container: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: '20px',
-    },
-    userInfo: {
-        width: '45%',
-        padding: '20px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-    },
-    productList: {
-        width: '45%',
-        padding: '20px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-    },
-};
 
 export default UserPage;

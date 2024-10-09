@@ -1,3 +1,47 @@
 .home-page-container {
     padding: 70px 200px;
 }
+
+.sign-up-page-container {
+    padding: 70px 200px;
+}
+
+.log-in-page-container {
+    padding: 70px 200px;
+}
+
+.user-info-page-container {
+    /* display: flex;
+    justify-content: space-between;
+    padding: 70px; */
+    padding: 70px;
+    display: flex; /* Use flexbox to layout items */
+    width: 100%;
+}
+
+.user-info {
+    /* width: 45%;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px; */
+    flex: 0 0 25%; /* Take up 25% of the width */
+    padding: 20px; /* Add some padding */
+    background-color: #f8f8f8; /* Optional: Background color */
+    border-right: 1px solid #ddd; 
+}
+
+.product-list {
+    /* width: 45%;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px; */
+    flex: 1; /* Take up the remaining space */
+    padding: 20px;
+}
+
+.product-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Adjust as needed */
+    justify-content: flex-start; /* Align to the left */
+}

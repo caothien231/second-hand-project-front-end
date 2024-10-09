@@ -17,6 +17,7 @@ function UploadProductPage() {
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
     const { user } = useUser();
+    const token = Cookies.get('token');
 
     const handleImageChange = (event) => {
         setImageFile(event.target.files[0]);
@@ -46,7 +47,11 @@ function UploadProductPage() {
           };
     
           // Post product data to the backend
-          await axios.post('http://localhost:8005/api/products/create', productData);
+          await axios.post('http://localhost:8005/api/products/create', productData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+          });
     
           setSuccess('Product uploaded successfully!');
           setError('');

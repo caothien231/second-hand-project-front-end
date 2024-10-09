@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate  } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Button, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { useUser } from '../context/UserContext';
@@ -19,28 +19,26 @@ function ProductDetail() {
         const fetchProduct = async () => {
             try {
                 // Fetch the product data
-                const response = await axios.get(`http://localhost:8005/api/products/${productId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const response = await axios.get(`http://localhost:8005/api/products/get/${productId}`);
                 const fetchedProduct = response.data;
                 setProduct(fetchedProduct);
-    
-                // Fetch the liked products list after the product data is available
-                const likedProductsResponse = await axios.get(`http://localhost:8005/api/users/${user.id}/liked-products`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-    
-                const likedProducts = likedProductsResponse.data.map(product => product.id);
-    
-                // Check if the fetched product is in the liked products list
-                if (fetchedProduct && likedProducts.includes(fetchedProduct.id)) {
-                    setIsLiked(true);
-                } else {
-                    setIsLiked(false);
+
+                if (token && user) {
+                    // Fetch the liked products list if the user is logged in
+                    const likedProductsResponse = await axios.get(`http://localhost:8005/api/users/${user.id}/liked-products`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+
+                    const likedProducts = likedProductsResponse.data.map(product => product.id);
+
+                    // Check if the fetched product is in the liked products list
+                    if (fetchedProduct && likedProducts.includes(fetchedProduct.id)) {
+                        setIsLiked(true);
+                    } else {
+                        setIsLiked(false);
+                    }
                 }
             } catch (error) {
                 console.error('Failed to fetch product:', error);
@@ -49,11 +47,17 @@ function ProductDetail() {
                 setLoading(false);
             }
         };
-    
+
         fetchProduct();
-    }, [productId, token, user.id]);
+    }, [productId, token, user]);
 
     const handleLikeToggle = async () => {
+        if (!user) {
+            // If no user, redirect to signup
+            navigate('/signup');
+            return;
+        }
+
         try {
             if (isLiked) {
                 // Unlike the product
@@ -77,11 +81,13 @@ function ProductDetail() {
         }
     };
 
-    // can implement a Payment method,
-    // for personal project, i just make it simple
-    // i assum the payment alway succes, 
-    // direct user to a thank you page.
     const handleBuy = async () => {
+        if (!user) {
+            // If no user, redirect to signup
+            navigate('/signup');
+            return;
+        }
+
         try {
             await axios.post(`http://localhost:8005/api/users/${user.id}/buy-product/${product.id}`, {}, {
                 headers: {
@@ -128,7 +134,6 @@ function ProductDetail() {
                         >
                             {isLiked ? 'Unlike' : 'Like'}
                         </Button>
-                        {/* Buy Button */}
                         <Button variant="success" onClick={handleBuy}>
                             Buy Now
                         </Button>

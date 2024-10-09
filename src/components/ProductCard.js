@@ -13,6 +13,11 @@ function ProductCard({ product, likedProducts }) {
 
     const handleLikeToggle = async () => {
         try {
+            if (!user) {
+                // If no user, redirect to signup
+                navigate('/signup');
+                return;
+            }
             if (isLiked) {
                 // Unlike the product http://localhost:8005/api/users/${user.id}/unlike-product/${product.id}
                 await axios.delete(`http://localhost:8005/api/users/${user.id}/unlike-product/${product.id}`, {
