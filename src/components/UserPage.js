@@ -48,14 +48,14 @@ function UserPage() {
         if (user) {
             const fetchUserProducts = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8005/api/users/${user.id}/products`, {
+                    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users/${user.id}/products`, {
                         headers: {
                             Authorization: `Bearer ${Cookies.get('token')}`,
                         },
                     });
                     console.log("product: " + JSON.stringify(response.data, null, 2));
                     setProducts(response.data); // Store products in state
-                    const likedResponse = await axios.get(`http://localhost:8005/api/users/${user.id}/liked-products`, {
+                    const likedResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users/${user.id}/liked-products`, {
                         headers: {
                             Authorization: `Bearer ${Cookies.get('token')}`,
                         },

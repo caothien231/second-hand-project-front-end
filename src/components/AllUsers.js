@@ -10,7 +10,7 @@ function AllUsers() {
         const fetchUsers = async () => {
             const token = Cookies.get('token');
             try {
-                const response = await axios.get('http://localhost:8005/users/', {
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users/`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

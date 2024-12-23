@@ -12,7 +12,7 @@ function UserList() {
         const fetchUsers = async () => {
             const token = Cookies.get('token');
             try {
-                const response = await axios.get('http://localhost:8005/api/users/', {
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users/`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

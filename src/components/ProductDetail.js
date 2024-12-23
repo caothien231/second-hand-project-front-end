@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, Button, Spinner } from 'react-bootstrap';
+import { Row, Col, Card, Button, Spinner, Carousel } from 'react-bootstrap';
 import axios from 'axios';
 import { useUser } from '../context/UserContext';
 import Cookies from 'js-cookie';
+import moment from 'moment';
 
 function ProductDetail() {
     const { productId } = useParams();
@@ -19,13 +20,13 @@ function ProductDetail() {
         const fetchProduct = async () => {
             try {
                 // Fetch the product data
-                const response = await axios.get(`http://localhost:8005/api/products/get/${productId}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/products/get/${productId}`);
                 const fetchedProduct = response.data;
                 setProduct(fetchedProduct);
 
                 if (token && user) {
                     // Fetch the liked products list if the user is logged in
-                    const likedProductsResponse = await axios.get(`http://localhost:8005/api/users/${user.id}/liked-products`, {
+                    const likedProductsResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users/${user.id}/liked-products`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -49,27 +50,24 @@ function ProductDetail() {
         };
 
         fetchProduct();
-    }, [productId, token, user]);
+    }, [productId]);
 
     const handleLikeToggle = async () => {
         if (!user) {
-            // If no user, redirect to signup
             navigate('/signup');
             return;
         }
 
         try {
             if (isLiked) {
-                // Unlike the product
-                await axios.delete(`http://localhost:8005/api/users/${user.id}/unlike-product/${product.id}`, {
+                await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/users/${user.id}/unlike-product/${product.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
                 setIsLiked(false);
             } else {
-                // Like the product
-                await axios.post(`http://localhost:8005/api/users/${user.id}/like/${product.id}`, {}, {
+                await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/users/${user.id}/like/${product.id}`, {}, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -83,18 +81,16 @@ function ProductDetail() {
 
     const handleBuy = async () => {
         if (!user) {
-            // If no user, redirect to signup
             navigate('/signup');
             return;
         }
 
         try {
-            await axios.post(`http://localhost:8005/api/users/${user.id}/buy-product/${product.id}`, {}, {
+            await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/users/${user.id}/buy-product/${product.id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            // Redirect to Thank You page after successful purchase
             navigate('/thank-you');
         } catch (error) {
             console.error('Failed to buy product:', error);
@@ -109,39 +105,77 @@ function ProductDetail() {
         return <div>{error}</div>;
     }
 
+    const getListingDuration = (createdDate) => {
+        const momentDate = moment(createdDate);
+        return momentDate.fromNow();
+    };
+
     return (
-        <div className="product-detail-container">
+        <div className="product-detail-container mt-5">
             {product && (
-                <Card>
-                    {product.imageUrl ? (
-                        <Card.Img variant="top" src={product.imageUrl} alt={product.name} />
-                    ) : (
-                        <Card.Img variant="top" src="https://via.placeholder.com/150" alt="No Image Available" />
-                    )}
-                    <Card.Body>
-                        <Card.Title>{product.name}</Card.Title>
-                        <Card.Text>
-                            <strong>Price:</strong> ${product.price.toFixed(2)}<br />
-                            <strong>Description:</strong> {product.description}<br />
-                            <strong>Status:</strong> {product.status}<br />
-                            <strong>Seller:</strong> {product.seller.fullName}<br />
-                        </Card.Text>
-                        <Button
-                            variant={isLiked ? "danger" : "primary"}
-                            onClick={handleLikeToggle}
-                            style={isLiked ? { backgroundColor: 'pink' } : {}}
-                            className="me-2"
-                        >
-                            {isLiked ? 'Unlike' : 'Like'}
-                        </Button>
-                        <Button variant="success" onClick={handleBuy}>
-                            Buy Now
-                        </Button>
-                        <Button variant="primary" onClick={() => window.history.back()} className="ms-2">
-                            Back to Products
-                        </Button>
-                    </Card.Body>
-                </Card>
+                <Row className="gx-5">
+                    {/* Left Part - Image Carousel */}
+                    <Col md={7}>
+                        <Card className="shadow-sm border-0">
+                            <Carousel>
+                                <Carousel.Item>
+                                    <img
+                                        className="d-block w-100 rounded"
+                                        src={product.imageUrl}
+                                        alt={product.name}
+                                        style={{ maxHeight: '500px', objectFit: 'cover' }}
+                                    />
+                                </Carousel.Item>
+                            </Carousel>
+                        </Card>
+                    </Col>
+
+                    {/* Right Part - Product Details */}
+                    <Col md={5}>
+                        <Card className="shadow-sm border-0">
+                            <Card.Body>
+                                <h1 className="fw-bold">{product.name}</h1>
+                                <h3 className="text-success fw-bold mt-2">${product.price.toFixed(2)}</h3>
+                                <p className="text-muted">{getListingDuration(product.createdDate)}</p>
+
+                                <Card.Text className="mt-4">
+                                    <strong>Description:</strong> {product.description}
+                                </Card.Text>
+                                <Card.Text>
+                                    <strong>Status:</strong> {product.status}
+                                </Card.Text>
+                                <Card.Text>
+                                    <strong>Seller:</strong> {product.seller.fullName}
+                                </Card.Text>
+
+                                <div className="mt-5">
+                                    <Button
+                                        variant={isLiked ? "danger" : "primary"}
+                                        onClick={handleLikeToggle}
+                                        style={isLiked ? { backgroundColor: 'pink' } : {}}
+                                        className="me-3 px-4"
+                                    >
+                                        {isLiked ? 'Unlike' : 'Like'}
+                                    </Button>
+                                    <Button
+                                        variant="success"
+                                        className="me-3 px-4"
+                                        onClick={handleBuy}
+                                    >
+                                        Buy Now
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        className="px-4"
+                                        onClick={() => window.history.back()}
+                                    >
+                                        Back
+                                    </Button>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
             )}
         </div>
     );

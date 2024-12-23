@@ -19,7 +19,7 @@ function SignUpPage() {
         setSuccess('');
 
         try {
-            const response = await axios.post('http://localhost:8005/auth/signup', {
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/signup`, {
                 fullName: fullName,
                 email: email,
                 password: password,

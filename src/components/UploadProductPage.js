@@ -27,38 +27,41 @@ function UploadProductPage() {
         event.preventDefault();
     
         try {
-          let imageUrl = null;
-    
-          // If an image file is provided, upload it to Firebase
-          if (imageFile) {
-            const storageRef = ref(storage, `images/${imageFile.name}`);
-            const snapshot = await uploadBytes(storageRef, imageFile);
-            imageUrl = await getDownloadURL(snapshot.ref);
-          }
-    
-          // Prepare product data, including the image URL if available
-          const productData = {
-            name: productName,
-            price: productPrice,
-            description: productDescription,
-            imageUrl: imageUrl || '', // Optional image URL (empty string if no image)
-            sellerId: user.id,
-            status: 'AVAILABLE'
-          };
-    
-          // Post product data to the backend
-          await axios.post('http://localhost:8005/api/products/create', productData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-          });
-    
-          setSuccess('Product uploaded successfully!');
-          setError('');
-          setProductName('');
-          setProductPrice('');
-          setProductDescription('');
-          setImageFile(null); // Reset the file input
+            let imageUrl = null;
+        
+            // If an image file is provided, upload it to Firebase
+            if (imageFile) {
+                const storageRef = ref(storage, `images/${imageFile.name}`);
+                const snapshot = await uploadBytes(storageRef, imageFile);
+                imageUrl = await getDownloadURL(snapshot.ref);
+            }
+        
+            // Prepare product data, including the image URL if available
+            const productData = {
+                name: productName,
+                price: productPrice,
+                description: productDescription,
+                imageUrl: imageUrl || '', // Optional image URL (empty string if no image)
+                sellerId: user.id,
+                status: 'AVAILABLE'
+            };
+        
+            // Post product data to the backend
+            await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/products/create`, productData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+            });
+        
+            setSuccess('Product uploaded successfully!');
+            setError('');
+            setProductName('');
+            setProductPrice('');
+            setProductDescription('');
+            setImageFile(null); // Reset the file input
+            setTimeout(() => {
+                navigate('/home');
+            }, 3000);
         } catch (err) {
           console.error('Failed to upload product', err);
           setError('Failed to upload product. Please try again.');

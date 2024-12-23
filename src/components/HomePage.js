@@ -12,36 +12,46 @@ import { useUser } from '../context/UserContext';
 import Cookies from 'js-cookie';
 
 function HomePage() {
-    const { user } = useUser(); // Get the user from context
+    const { user, setUser } = useUser();
     const [products, setProducts] = useState([]);
     const [likedProducts, setLikedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const token = Cookies.get('token');  // Get token from cookies
-    const [isLoggedIn, setIsLoggedIn] = useState(!!token); // Keep track of login status
-    console.log(user);
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                // Fetch all available products
-                const response = await axios.get('http://localhost:8005/api/products/');
-                const availableProducts = response.data.filter(product => product.status === 'AVAILABLE');
-                setProducts(availableProducts);
+    const token = Cookies.get('token'); // Get token from cookies
 
-                // If a user is logged in, fetch their liked products
-                if (isLoggedIn && token) {
-                    console.log("USER ID " + user.id);
-                    const likedResponse = await axios.get(`http://localhost:8005/api/users/${user.id}/liked-products`, {
+    useEffect(() => {
+        const fetchUserAndProducts = async () => {
+            if (!user && token) {
+                try {
+                    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users/me`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    const likedProductIds = likedResponse.data.map(product => product.id); // Store only product IDs
-                    console.log("product: " + likedProductIds);
+                    setUser(response.data);
+                } catch (err) {
+                    console.error("Failed to restore user session: ", err);
+                    setError('Failed to restore session. Please log in again.');
+                }
+            }
+    
+            try {
+                // Fetch all available products
+                const productResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/products/`);
+                const availableProducts = productResponse.data.filter(product => product.status === 'AVAILABLE');
+                setProducts(availableProducts);
+    
+                // If a user is logged in, fetch their liked products
+                if (user && user.id) {
+                    const likedResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users/${user.id}/liked-products`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    const likedProductIds = likedResponse.data.map(product => product.id);
                     setLikedProducts(likedProductIds);
                 } else {
-                    // Reset liked products if no user is logged in
                     setLikedProducts([]);
                 }
             } catch (error) {
@@ -51,9 +61,9 @@ function HomePage() {
                 setLoading(false);
             }
         };
-
-        fetchProducts();
-    }, [token, isLoggedIn]);  // Re-run the effect if the token or user changes
+    
+        fetchUserAndProducts();
+    }, [token, user]);
 
     // Filter products based on the search term
     const filteredProducts = products.filter(product =>
@@ -73,11 +83,21 @@ function HomePage() {
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <h2>Products</h2>
             <Row xs={1} md={2} lg={3} className="g-4">
-                {filteredProducts.map((product) => (
-                    <Col key={product.id}>
-                        <ProductCard product={product} likedProducts={likedProducts} /> {/* Pass likedProducts */}
+                {filteredProducts.length > 0 ? (
+                    filteredProducts.map((product) => (
+                        <Col key={product.id}>
+                            <ProductCard product={product} likedProducts={likedProducts} />
+                        </Col>
+                    ))
+                ) : (
+                    <Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Text>No products found for "{searchTerm}".</Card.Text>
+                            </Card.Body>
+                        </Card>
                     </Col>
-                ))}
+                )}
             </Row>
             <Routes>
                 <Route path="user-info" element={<UserInfo />} />

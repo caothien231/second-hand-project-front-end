@@ -17,7 +17,7 @@ function LoginPage({ onLogin }) {
         event.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:8005/auth/login', {
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, {
                 email: email,
                 password: password
             });
@@ -27,7 +27,7 @@ function LoginPage({ onLogin }) {
             Cookies.set('token', token, { expires: expirationDate, secure: true });
 
             // Fetch user info and set it in context
-            const userInfoResponse = await axios.get('http://localhost:8005/api/users/me', {
+            const userInfoResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/users/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

@@ -11,7 +11,7 @@ function HealthStatus() {
         const fetchHealthStatus = async () => {
             const token = Cookies.get('token');
             try {
-                const response = await axios.get('http://localhost:8005/api/health', {
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/health`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
