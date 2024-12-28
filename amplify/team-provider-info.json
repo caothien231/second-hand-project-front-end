@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-secondhandproject-dev-723f3-authRole",
+      "UnauthRoleArn": "arn:aws:iam::202533506173:role/amplify-secondhandproject-dev-723f3-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::202533506173:role/amplify-secondhandproject-dev-723f3-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-secondhandproject-dev-723f3-deployment",
+      "UnauthRoleName": "amplify-secondhandproject-dev-723f3-unauthRole",
+      "StackName": "amplify-secondhandproject-dev-723f3",
+      "StackId": "arn:aws:cloudformation:us-east-2:202533506173:stack/amplify-secondhandproject-dev-723f3/143f1c70-c18b-11ef-a185-067ea58f5161",
+      "AmplifyAppId": "d2ukr68ryjq9cx"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2ukr68ryjq9cx",
+          "type": "cicd"
+        }
+      }
+    }
+  }
+}
