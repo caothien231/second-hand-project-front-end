@@ -39,6 +39,7 @@ function App() {
             <div className="App">
                 <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
                 <Routes>
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/home/*" element={<HomePage />} />

@@ -9,15 +9,41 @@
 .log-in-page-container {
     padding: 70px 200px;
 }
+.thank-you-page {
+    padding: 70px 200px;
+}
 
 .user-info-page-container {
     /* display: flex;
     justify-content: space-between;
     padding: 70px; */
     padding: 70px;
-    display: flex; /* Use flexbox to layout items */
-    width: 100%;
+    display: flex; 
+    /* width: 100%; */
+    flex-direction: row;
 }
+
+.button-group-container {
+    display: flex;
+    width: 100%; 
+}
+
+.button-group-container button {
+    flex: 1;
+    margin: 0; 
+    text-align: center; 
+    padding: 10px 0; 
+    border-radius: 15px; 
+    border: 1px solid #ddd; 
+    margin: 5px; 
+    transition: all 0.3s ease; 
+}
+
+/* .button-group-container button:hover {
+    transform: scale(1.05); 
+    background-color: #f1f1f1; 
+} */
+
 
 .product-detail-container {
     padding: 70px;
@@ -39,9 +65,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-size: contain; /* Ensures image is fully visible */
+    background-size: contain; 
     background-position: center;
-    background-repeat: no-repeat; /* Avoids repeating the image */
+    background-repeat: no-repeat; 
     z-index: 1;
 }
 
@@ -71,9 +97,9 @@
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px; */
-    flex: 0 0 25%; /* Take up 25% of the width */
-    padding: 20px; /* Add some padding */
-    background-color: #f8f8f8; /* Optional: Background color */
+    flex: 0 0 25%; 
+    padding: 20px; 
+    background-color: #f8f8f8; 
     border-right: 1px solid #ddd; 
 }
 
@@ -82,20 +108,20 @@
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px; */
-    flex: 1; /* Take up the remaining space */
+    flex: 1; 
     padding: 20px;
 }
 
 .product-cards-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px; /* Adjust as needed */
-    justify-content: flex-start; /* Align to the left */
+    gap: 16px; 
+    justify-content: flex-start; 
 }
 
 .product-image {
     width: 100%;
-    height: 200px; /* Adjust as needed */
+    height: 200px; 
     object-fit: cover;
     border-radius: 4px;
 }
@@ -104,40 +130,71 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%; /* Ensure uniform height for all cards */
+    height: 100%; 
 }
 
 .card-body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%; /* Ensure the entire card body takes up consistent height */
+    height: 100%; 
 }
 
 .description-container {
-    height: 50px; /* Fixed height for description area */
-    overflow: hidden; /* Hide any overflow text */
-    text-overflow: ellipsis; /* Add ellipsis (...) for overflow */
+    height: 50px; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Number of lines to show */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
 .card-text-container {
-    flex-grow: 1; /* Allow this area to grow evenly */
+    flex-grow: 1; 
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Evenly distribute space between sections */
+    justify-content: space-between; 
 }
 
 .product-card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid layout */
-    gap: 16px; /* Space between cards */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 16px; 
 }
 
 .button-group {
     display: flex;
-    justify-content: center; /* Align buttons to the left */
-    gap: 10px; /* Add spacing between buttons */
+    justify-content: center; 
+    gap: 10px; 
 }
+
+@media (max-width: 600px) {
+    .home-page-container, 
+    .sign-up-page-container, 
+    .log-in-page-container, 
+    .thank-you-page {
+        padding: 20px;
+    }
+}
+
+.card-buttons-container button {
+    flex: 1; 
+    margin: 0 5px;
+    text-align: center; 
+    padding: 10px 0; 
+    border-radius: 15px; 
+    transition: all 0.3s ease;
+}
+
+.card-buttons-container {
+    display: flex; 
+    gap: 10px; 
+    justify-content: space-between; 
+    margin-top: 10px; 
+}
+
+/* .card-buttons-container button:hover {
+    transform: scale(1.05);
+    background-color: #f1f1f1; 
+} 
+*/

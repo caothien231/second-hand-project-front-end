@@ -54,7 +54,7 @@ function ProductDetail() {
 
     const handleLikeToggle = async () => {
         if (!user) {
-            navigate('/signup');
+            navigate('/login');
             return;
         }
 
@@ -81,7 +81,7 @@ function ProductDetail() {
 
     const handleBuy = async () => {
         if (!user) {
-            navigate('/signup');
+            navigate('/login');
             return;
         }
 
@@ -148,30 +148,28 @@ function ProductDetail() {
                                     <strong>Seller:</strong> {product.seller.fullName}
                                 </Card.Text>
 
-                                <div className="mt-5">
-                                    <Button
-                                        variant={isLiked ? "danger" : "primary"}
-                                        onClick={handleLikeToggle}
-                                        style={isLiked ? { backgroundColor: 'pink' } : {}}
-                                        className="me-3 px-4"
-                                    >
-                                        {isLiked ? 'Unlike' : 'Like'}
-                                    </Button>
-                                    <Button
-                                        variant="success"
-                                        className="me-3 px-4"
-                                        onClick={handleBuy}
-                                    >
-                                        Buy Now
-                                    </Button>
-                                    <Button
-                                        variant="secondary"
-                                        className="px-4"
-                                        onClick={() => window.history.back()}
-                                    >
-                                        Back
-                                    </Button>
-                                </div>
+                                <div className="button-group-container mt-5">
+    <Button
+        variant={isLiked ? "danger" : "primary"}
+        onClick={handleLikeToggle}
+        style={isLiked ? { backgroundColor: 'pink' } : {}}
+    >
+        {isLiked ? 'Unlike' : 'Like'}
+    </Button>
+    <Button
+        variant="success"
+        onClick={handleBuy}
+    >
+        Buy Now
+    </Button>
+    <Button
+        variant="secondary"
+        onClick={() => window.history.back()}
+    >
+        Back
+    </Button>
+</div>
+
                             </Card.Body>
                         </Card>
                     </Col>

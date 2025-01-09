@@ -32,7 +32,7 @@ function LoginPage({ onLogin }) {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log("User info: " + JSON.stringify(userInfoResponse.data));
+            // console.log("User info: " + JSON.stringify(userInfoResponse.data));
             setUser(userInfoResponse.data);
 
             // notify user before token expires

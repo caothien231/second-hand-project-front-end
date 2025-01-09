@@ -82,10 +82,10 @@ function HomePage() {
         <div className="home-page-container">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <h2>Products</h2>
-            <Row xs={1} md={2} lg={3} className="g-4">
+            <Row xs={1} sm={2} md={3} className="g-4">
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((product) => (
-                        <Col key={product.id}>
+                        <Col key={product.id} xs={12} sm={6} md={4}>
                             <ProductCard product={product} likedProducts={likedProducts} />
                         </Col>
                     ))
